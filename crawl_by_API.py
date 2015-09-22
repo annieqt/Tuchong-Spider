@@ -4,9 +4,9 @@
 #	Copyright Reserved by authors.   
 #
 #	A spider for tuchong pictures: 
-#   Collecting pictures of a specified author
-#   Author: Tian Wang
-#   Date: 2015-09-15
+#   	Collecting pictures of a specified author
+#	Author: Tian Wang
+#	Date: 2015-09-15
 #---------------------------------------
 import os
 import time
