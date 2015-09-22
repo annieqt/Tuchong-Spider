@@ -1,4 +1,4 @@
-Crawling photots of a specified author from www.tuchong.com.
+Crawling photos of a specified author from www.tuchong.com.
 
 Since tuchong uses a waterfall layout which lazy loads pictures, two ways of implmenting the spider is provided.
 
