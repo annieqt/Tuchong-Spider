@@ -4,10 +4,10 @@
 #	Copyright Reserved by authors.   
 #
 #	A spider for tuchong pictures: 
-#   Collecting pictures of a specified author
-#   Author: Tian Wang
+#   	Collecting pictures of a specified author
+#   	Author: Tian Wang
 #	https://github.com/annieqt/Tuchong-Spider
-#   Date: 2015-09-15
+#   	Date: 2015-09-15
 #---------------------------------------
 import os
 import time
@@ -104,7 +104,7 @@ if __name__ == '__main__':
 	#	A spider for tuchong pictures: 
 	#	Collecting pictures of a specified author
 	#	Author: Tian Wang 
-	#   https://github.com/annieqt/Tuchong-Spider
+	#   	https://github.com/annieqt/Tuchong-Spider
 	#	Date: 2015-09-15
 	#---------------------------------------
 	"""
