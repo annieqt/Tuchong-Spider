@@ -6,6 +6,7 @@
 #	A spider for tuchong pictures: 
 #   Collecting pictures of a specified author
 #   Author: Tian Wang
+#	https://github.com/annieqt/Tuchong-Spider
 #   Date: 2015-09-15
 #---------------------------------------
 import os
@@ -28,11 +29,6 @@ class Tuchong_Spider:
 		self.today = time.strftime("%Y-%m-%d")
 		print u'Spider initiated.'
 
-	#Get html content of an url
-	def get_html(self, url):
-		html = urllib2.urlopen(url).read()
-		return html
-
 	#spider entrance
 	def start(self):
 		print u'Start Collecting the most recent %s photos from: %s' %(self.num_of_pic, self.my_url)
@@ -44,7 +40,6 @@ class Tuchong_Spider:
 		level1_img_url_list = self.decode_level1_img_url_list_from_json(photo_json_str)
 		index = self.download_photos(level1_img_url_list)
 		print '%s photos saved in folder: %s.' %(index, self.folder)
-
 
 	#Download at most num_of_pic of the photos via the level1 urls to level2 urls
 	def download_photos(self, level1_img_url_list):
@@ -58,6 +53,12 @@ class Tuchong_Spider:
 				self.save_img(level2_img_url, index)
 				index+=1
 		return index-1
+
+	#Get html content of an url
+	def get_html(self, url):
+		html = urllib2.urlopen(url).read()
+		return html
+
 	#Get site_id that specify an author
 	def init_site_id(self, html):
 		soup = BeautifulSoup(html, 'html.parser')
@@ -102,7 +103,8 @@ if __name__ == '__main__':
 	#
 	#	A spider for tuchong pictures: 
 	#	Collecting pictures of a specified author
-	#	Author: Tian Wang
+	#	Author: Tian Wang 
+	#   https://github.com/annieqt/Tuchong-Spider
 	#	Date: 2015-09-15
 	#---------------------------------------
 	"""
