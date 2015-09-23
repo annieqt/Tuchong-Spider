@@ -12,7 +12,6 @@
 import os
 import time
 import string
-import time
 import json
 import urllib
 import urllib2
