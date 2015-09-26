@@ -26,6 +26,8 @@ class Tuchong_Spider:
 		self.site_id = ''
 		self.API = ''
 		self.today = time.strftime("%Y-%m-%d")
+		self.username = ''
+		self.pwd = ''
 		print u'Spider initiated.'
 
 	#spider entrance
@@ -38,6 +40,8 @@ class Tuchong_Spider:
 
 		level1_img_url_list = self.decode_level1_img_url_list_from_json(photo_json_str)
 		index = self.download_photos(level1_img_url_list)
+		if index < self.num_of_pic:
+			print 'The author only has %s photos, less than %s' %(index, self.num_of_pic)
 		print '%s photos saved in folder: %s.' %(index, self.folder)
 
 	#Download at most num_of_pic of the photos via the level1 urls to level2 urls
@@ -55,8 +59,35 @@ class Tuchong_Spider:
 
 	#Get html content of an url
 	def get_html(self, url):
-		html = urllib2.urlopen(url).read()
+		req = urllib2.Request(url)
+		try:
+		    handle = urllib2.urlopen(req)
+		    html = handle.read()
+		except IOError, e:
+		    if hasattr(e, 'code'):
+		        if e.code == 401:
+		        	html = ""
+		     		# if self.username !='' and self.pwd !='':
+		     		# 	p = urllib2.HTTPPasswordMgrWithDefaultRealm()    			
+		     		# else:
+			      #       print 'This photo need a user login in to be viewed. Do you want to continue? Enter 1 or 2.'
+			      #       print '1 YES I will enter my username and password to continue download.'
+			      #       print '2 NO I want to skip this photo.'
+			      #       will = str(raw_input())
+			      #       if will == '1':
+			      #       	self.login()
+			      #       else:
+			            	# html = ""
 		return html
+
+
+	#Enter username and password 
+	def login(self):
+		print 'Please enter your username:'
+		self.username = str(raw_input())
+		print 'Please enter your password:'
+		self.pwd = str(raw_input())
+		pass
 
 	#Get site_id that specify an author
 	def init_site_id(self, html):
