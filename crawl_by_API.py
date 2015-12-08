@@ -15,8 +15,6 @@ import string
 import json
 import urllib
 import urllib2
-import getpass
-import cookielib
 from bs4 import BeautifulSoup
 
 class Tuchong_Spider:
@@ -27,9 +25,9 @@ class Tuchong_Spider:
 		self.folder = 'photos\\%s' % author
 		self.site_id = ''
 		self.API = ''
+		self.today = time.strftime("%Y-%m-%d")
 		self.username = ''
 		self.pwd = ''
-		self.today = time.strftime("%Y-%m-%d")
 		print u'Spider initiated.'
 
 	#spider entrance
@@ -50,7 +48,7 @@ class Tuchong_Spider:
 	def download_photos(self, level1_img_url_list):
 		index = 1
 		for level1_img_url in level1_img_url_list:
-			# print u'Start extracting level 2 url from: ' + level1_img_url
+			print u'Start extracting level 2 url from: ' + level1_img_url
 			level2_img_url_list = self.extract_level2_img_url(level1_img_url)	
 			for level2_img_url in level2_img_url_list:
 				if self.num_of_pic < index:
@@ -63,54 +61,21 @@ class Tuchong_Spider:
 	def get_html(self, url):
 		req = urllib2.Request(url)
 		try:
-			#need cookie
-		    html = urllib2.urlopen(req).read()
+		    handle = urllib2.urlopen(req)
+		    html = handle.read()
 		except IOError, e:
 		    if hasattr(e, 'code'):
 		        if e.code == 401:
-	        		print 'This photo need a user login in to be viewed. Do you want to continue?'
-	        		print ' 1 YES I will enter my username and password to continue download.'
-	        		print ' 2 NO I want to skip this photo.'
-	        		print 'Please enter 1 or 2.'
-	        		will = str(raw_input())
-	        		if will == '1':
-	        			self.login()
-	        			self.get_html_with_authentication()
-	        			#todo
-	        		else:
-	        			html = ""
-		        else:
 		        	html = ""
 		return html
-	#fake cookie
-	def get_html_with_authentication(self):
-		#登陆页面，可以通过抓包工具分析获得，如fiddler，wireshark
-    	login_page = "http://tuchong.com/"
-	    try:
-	        #获得一个cookieJar实例
-	        cj = cookielib.CookieJar()
-	        #cookieJar作为参数，获得一个opener的实例
-	        opener=urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-	        #伪装成一个正常的浏览器，避免有些web服务器拒绝访问。
-	        opener.addheaders = [('User-agent','Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)')]
-	        #生成Post数据，含有登陆用户名密码。
-	        data = urllib.urlencode({"email":user,"password":password})
-	        #以post的方法访问登陆页面，访问之后cookieJar会自定保存cookie
-	        opener.open(login_page,data)
-	        #以带cookie的方式访问页面
-	        op=opener.open(url)
-	        #读取页面源码
-	        data= op.read()
-	        return data
-	    except Exception,e:
-	        print str(e)
 
 	#Enter username and password 
 	def login(self):
 		print 'Please enter your username:'
 		self.username = str(raw_input())
 		print 'Please enter your password:'
-		self.pwd = str(getpass.getpass())
+		self.pwd = str(raw_input())
+		pass
 
 	#Get site_id that specify an author
 	def init_site_id(self, html):
