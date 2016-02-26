@@ -19,12 +19,12 @@ from bs4 import BeautifulSoup
 
 class Tuchong_Spider:
 	#Init initial url and folder to save photos
-	def __init__(self, author, url, num_of_pic):
+	def __init__(self, url, num_of_pic):
 		self.my_url = url
 		self.num_of_pic = int(num_of_pic)
-		self.folder = 'photos\\%s' % author
+		self.folder = 'tuchong'
 		self.site_id = ''
-		self.API = ''
+		self.API = 'http://tuchong.com'
 		self.today = time.strftime("%Y-%m-%d")
 		self.username = ''
 		self.pwd = ''
@@ -34,10 +34,11 @@ class Tuchong_Spider:
 	def start(self):
 		print u'Start Collecting the most recent %s photos from: %s' %(self.num_of_pic, self.my_url)
 		html = self.get_html(self.my_url)
+		self.get_author(html)
 		self.init_site_id(html)
-		self.API = self.my_url+"/rest/sites/%s/posts/%s?limit=%s" %(self.site_id,self.today,self.num_of_pic)
+		self.API += "/rest/sites/%s/posts/%s?limit=%s" %(self.site_id,self.today,self.num_of_pic)	
+		#print '%s' %self.API
 		photo_json_str = self.get_html(self.API)
-
 		level1_img_url_list = self.decode_level1_img_url_list_from_json(photo_json_str)
 		index = self.download_photos(level1_img_url_list)
 		if index < self.num_of_pic:
@@ -48,7 +49,7 @@ class Tuchong_Spider:
 	def download_photos(self, level1_img_url_list):
 		index = 1
 		for level1_img_url in level1_img_url_list:
-			print u'Start extracting level 2 url from: ' + level1_img_url
+			#print u'Start extracting level 2 url from: ' + level1_img_url
 			level2_img_url_list = self.extract_level2_img_url(level1_img_url)	
 			for level2_img_url in level2_img_url_list:
 				if self.num_of_pic < index:
@@ -76,6 +77,13 @@ class Tuchong_Spider:
 		print 'Please enter your password:'
 		self.pwd = str(raw_input())
 		pass
+
+	#Get author name to initiate folder
+	def get_author(self, html):
+		soup = BeautifulSoup(html, 'html.parser')
+		profile = soup.find("div", attrs={"class":"profile-name"})
+		author = profile.h2.get_text().strip()
+		self.folder ='photos\\%s' % author
 
 	#Get site_id that specify an author
 	def init_site_id(self, html):
@@ -127,12 +135,12 @@ if __name__ == '__main__':
 	#---------------------------------------
 	"""
 
-	print u'please enter the prefix of the url of the author''s mainpage. eg: annieqt'
-	author = str(raw_input())
-	url = 'http://%s.tuchong.com' % author
+	print u'please enter the url of the author''s mainpage. \n eg: annieqt.tuchong.com'
+	url = str(raw_input())
+	url = url if url.startswith('http') else 'http://%s' % url
 
 	print u'please enter the number of the photo you want to download at most. eg: 200:'
 	num_of_pic = str(raw_input())
 
-	mySpider = Tuchong_Spider(author, url, num_of_pic)
+	mySpider = Tuchong_Spider(url, num_of_pic)
 	mySpider.start()
