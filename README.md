@@ -1,6 +1,7 @@
-#Tuchong Crawler
+#Tuchong Crawler 
 ###Feature
 A Simple spider for crawling photos of a specified author's **TuBlog** from [Tuchong][1] by sending request to the REST API that **Tuchong** provides.
+Based on Python 2.7.9.
 
 ###Guide
 1. Input the url of the author's **TuBlog**, eg: http://annieqt.tuchong.com/.
